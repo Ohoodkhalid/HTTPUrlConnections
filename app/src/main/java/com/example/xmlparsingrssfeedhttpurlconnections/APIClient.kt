@@ -7,7 +7,7 @@ class APIClient {
     private var retrofit : Retrofit? = null
     fun getClient(): Retrofit?{
         retrofit = Retrofit.Builder()
-            .baseUrl("https://www.perfume.com/")
+            .baseUrl("https://alafasyperfumes.com/")
             .addConverterFactory(SimpleXmlConverterFactory.create())
             .build()
         return retrofit

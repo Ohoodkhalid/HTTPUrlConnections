@@ -14,20 +14,14 @@ import java.net.URL
 import java.util.*
 
  import com.squareup.picasso.Picasso
+import java.lang.System.load
+import java.util.ServiceLoader.load
 
-class RecyclerViewAdapter (var  perfumes: List<Feed>,var ImgUrls:ArrayList<URL>,var context:Context) : RecyclerView.Adapter<RecyclerViewAdapter.ItemViewHolder>() {
+class RecyclerViewAdapter (var perfumes: List<String>,var ImgUrls:ArrayList<String>) : RecyclerView.Adapter<RecyclerViewAdapter.ItemViewHolder>() {
 //
     val TAG = "Adapter"
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-
-//    var imageView1 :ImageView
-//    init{
-//        imageView1 = View.findViewById<View>(R.id.imageView1) as ImageView
-//    }
-
-
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_row, parent,false))
@@ -36,7 +30,9 @@ class RecyclerViewAdapter (var  perfumes: List<Feed>,var ImgUrls:ArrayList<URL>,
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         var perfume = perfumes[position]
-       /// Picasso.with(context).load(ImgUrls[position]).resize(150,150).into(ItemViewHolder.imageView1)
+       var url = ImgUrls[position]
+
+
 
 
 
@@ -44,16 +40,19 @@ class RecyclerViewAdapter (var  perfumes: List<Feed>,var ImgUrls:ArrayList<URL>,
       // picasso.with(conttext).load()
 
         holder.itemView.apply {
-         // nameOfPer1.text = perfume.title
-         ///   nameOfPer2.text = perfume.title
+        nameOfPer.text = perfume
 
+            Picasso.get().load(ImgUrls[position]).resize(150,150).into(imageView)
+
+           /// Picasso.get().load(url).into(imageView)
+            Log.d(TAG, "urlAdap: $url")
 
         }
     }
 
     override fun getItemCount() = perfumes.size
 
-    fun filterList(filteredPerfum: ArrayList<Feed>) {
+    fun filterList(filteredPerfum: ArrayList<String>) {
         this.perfumes = filteredPerfum
         notifyDataSetChanged()
     }

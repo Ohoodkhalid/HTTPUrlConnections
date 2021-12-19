@@ -6,12 +6,12 @@ import retrofit2.Call
 
 
 interface FeedAPI {
-    @get:GET("/blog/feed/")
+    @get:GET("rss/latest-products")
     val feed: Call<Feed?>?
 
 
 
     companion object {
-        const val BASE_URL = "https://www.perfume.com/blog/"
+        const val BASE_URL ="https://www.theperfumeshop.com/blog"
     }
 }

@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.xmlparsingrssfeedhttpurlconnections.FeedAPI.Companion.BASE_URL
@@ -27,31 +28,32 @@ class perfume : AppCompatActivity() {
     private lateinit var recView: RecyclerView
     private lateinit var rvAdapter: RecyclerViewAdapter
     lateinit var searchEditT: EditText
-    var  perfumes=  ArrayList<Feed>()
-    var  filter=  ArrayList<Feed>()
+    var  perfumes=  ArrayList<String>()
+    var  filter=  ArrayList<String>()
     var ImgUrls =  ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_perfume)
 
-        ImgUrls.add("https://img.perfume.com/images/products/parent/medium/60587w.jpg")
-        ImgUrls.add("https://img.perfume.com/images/products/sku/small/mdabpt.jpg")
-        ImgUrls.add("https://img.perfume.com/images/products/sku/small/jw34pu.jpg")
-        ImgUrls.add("https://img.perfume.com/images/products/sku/small/addes17.jpg")
-        ImgUrls.add("https://img.perfume.com/images/products/sku/small/wdiori.jpg")
-        ImgUrls.add("https://img.perfume.com/images/products/sku/small/53624.jpg")
-        ImgUrls.add("https://img.perfume.com/images/products/parent/medium/518w.jpg")
-        ImgUrls.add("https://img.perfume.com/images/products/parent/medium/60391w.jpg")
-        ImgUrls.add("https://img.perfume.com/images/products/parent/medium/291m.jpg")
-        ImgUrls.add("https://img.perfume.com/images/products/sku/small/sm34ps.jpg")
-        ImgUrls.add("https://img.perfume.com/images/products/sku/small/diorhom34.jpg")
+//        ImgUrls.add("https://img.perfume.com/images/products/parent/medium/60587w.jpg")
+//        ImgUrls.add("https://img.perfume.com/images/products/sku/small/mdabpt.jpg")
+//        ImgUrls.add("https://img.perfume.com/images/products/sku/small/jw34pu.jpg")
+//        ImgUrls.add("https://img.perfume.com/images/products/sku/small/addes17.jpg")
+//        ImgUrls.add("https://img.perfume.com/images/products/sku/small/wdiori.jpg")
+//        ImgUrls.add("https://img.perfume.com/images/products/sku/small/53624.jpg")
+//        ImgUrls.add("https://img.perfume.com/images/products/parent/medium/518w.jpg")
+//        ImgUrls.add("https://img.perfume.com/images/products/parent/medium/60391w.jpg")
+//        ImgUrls.add("https://img.perfume.com/images/products/parent/medium/291m.jpg")
+//        ImgUrls.add("https://img.perfume.com/images/products/sku/small/sm34ps.jpg")
+//        ImgUrls.add("https://img.perfume.com/images/products/sku/small/diorhom34.jpg")
 
-//
-//        recView = findViewById(R.id.recView)
-//        rvAdapter = RecyclerViewAdapter(perfumes)
-//        recView.adapter = rvAdapter
-//        recView.layoutManager = LinearLayoutManager(this)
+
+        recView = findViewById(R.id.recView)
+        rvAdapter = RecyclerViewAdapter(perfumes,ImgUrls)
+        recView.adapter = rvAdapter
+        recView.layoutManager = GridLayoutManager(this, 2)
+
 
         searchEditT = findViewById(R.id.searchEditT)
 
@@ -64,7 +66,7 @@ class perfume : AppCompatActivity() {
 
             override fun afterTextChanged(editable: Editable) {
                 //after the change calling the method and passing the search input
-               // filter(editable.toString())
+              filter(editable.toString())
             }
         })
 
@@ -103,16 +105,19 @@ class perfume : AppCompatActivity() {
 
                     Log.d(TAG, "onResponse: feed: " + response.body().toString())
                     Log.d(TAG, "onResponse: Server Response: $response")
-                 val entries = response.body()?.channel?.title
-                    Log.d(TAG, "onResponse: feed: $entries")
+               ///  val entries = response.body()?.channel?.title
+                    val url =  response.body()?.channel?.items!![0].enclosure?.url
+                    Log.d(TAG, "url: $url")
+                  ////  Log.d(TAG, "onResponse: feed: $entries")
                     val xmlresponse = response.errorBody()
                     Log.d(TAG, "onResponse: feed: $xmlresponse")
-//                for(data in response.body()!!){
-//                    perfumes.add(data)
-//
-//                }
-//                rvAdapter.notifyDataSetChanged()
-//
+                for(data in response.body()!!.channel?.items!!){
+                    perfumes.add(data.title!!)
+                    ImgUrls.add(data.enclosure?.url!!)
+
+                }
+                rvAdapter.notifyDataSetChanged()
+
            }
 
             override fun onFailure(call: Call<Feed?>, t: Throwable) {
@@ -121,35 +126,35 @@ class perfume : AppCompatActivity() {
         })
    }
 
-    private val textWatcher = object : TextWatcher {
-        override fun afterTextChanged(s: Editable?) {
-           Filter(s.toString())
-        }
-
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-        }
-
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-          ///  recView.text = s
-
-        }
-    }
-
-    private fun Filter(text: String) {
-
-
-    }
-
-//    private fun filter(text: String) {
-//        //new array list that will hold the filtered data
-//        val filteredNames = ArrayList<Feed>()
-//        //looping through existing elements and adding the element to filtered list
-//        perfumes.filterTo(filteredNames) {
-//            //if the existing elements contains the search input
-//            it.name.toLowerCase().contains(text.toLowerCase())
+//    private val textWatcher = object : TextWatcher {
+//        override fun afterTextChanged(s: Editable?) {
+//           Filter(s.toString())
 //        }
-//        //calling a method of the adapter class and passing the filtered list
-//        rvAdapter!!.filterList(filteredNames)
+//
+//        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+//        }
+//
+//        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//          ///  recView.text = s
+//
+//        }
 //    }
+//
+//    private fun Filter(text: String) {
+//
+//
+//    }
+
+    private fun filter(text: String) {
+        //new array list that will hold the filtered data
+        val filteredNames = ArrayList<String>()
+        //looping through existing elements and adding the element to filtered list
+        perfumes.filterTo(filteredNames) {
+            //if the existing elements contains the search input
+            it.toLowerCase().contains(text.toLowerCase())
+        }
+        //calling a method of the adapter class and passing the filtered list
+        rvAdapter!!.filterList(filteredNames)
+    }
 
 }
