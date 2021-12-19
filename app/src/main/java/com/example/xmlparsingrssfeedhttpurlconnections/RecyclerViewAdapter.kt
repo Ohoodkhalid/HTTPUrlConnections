@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.item_row.view.*
 import java.net.URL
 import java.util.*
@@ -37,14 +38,17 @@ class RecyclerViewAdapter (var perfumes: List<String>,var ImgUrls:ArrayList<Stri
 
 
 
-      // picasso.with(conttext).load()
+
 
         holder.itemView.apply {
         nameOfPer.text = perfume
 
-            Picasso.get().load(ImgUrls[position]).resize(150,150).into(imageView)
 
-           /// Picasso.get().load(url).into(imageView)
+//            Glide.with(context)
+//                .load(url)
+//                .into(imageView)
+
+          Picasso.get().load(ImgUrls[position]).resize(100,100).into(imageView)
             Log.d(TAG, "urlAdap: $url")
 
         }

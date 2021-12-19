@@ -29,24 +29,12 @@ class perfume : AppCompatActivity() {
     private lateinit var rvAdapter: RecyclerViewAdapter
     lateinit var searchEditT: EditText
     var  perfumes=  ArrayList<String>()
-    var  filter=  ArrayList<String>()
     var ImgUrls =  ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_perfume)
 
-//        ImgUrls.add("https://img.perfume.com/images/products/parent/medium/60587w.jpg")
-//        ImgUrls.add("https://img.perfume.com/images/products/sku/small/mdabpt.jpg")
-//        ImgUrls.add("https://img.perfume.com/images/products/sku/small/jw34pu.jpg")
-//        ImgUrls.add("https://img.perfume.com/images/products/sku/small/addes17.jpg")
-//        ImgUrls.add("https://img.perfume.com/images/products/sku/small/wdiori.jpg")
-//        ImgUrls.add("https://img.perfume.com/images/products/sku/small/53624.jpg")
-//        ImgUrls.add("https://img.perfume.com/images/products/parent/medium/518w.jpg")
-//        ImgUrls.add("https://img.perfume.com/images/products/parent/medium/60391w.jpg")
-//        ImgUrls.add("https://img.perfume.com/images/products/parent/medium/291m.jpg")
-//        ImgUrls.add("https://img.perfume.com/images/products/sku/small/sm34ps.jpg")
-//        ImgUrls.add("https://img.perfume.com/images/products/sku/small/diorhom34.jpg")
 
 
         recView = findViewById(R.id.recView)
@@ -70,7 +58,7 @@ class perfume : AppCompatActivity() {
             }
         })
 
-     ///   searchEditT.addTextChangedListener(textWatcher)
+
 
 
      getData()
@@ -89,13 +77,6 @@ class perfume : AppCompatActivity() {
 
     fun getData(){
 
-//        val retrofit = Retrofit.Builder()
-//            .baseUrl("https://www.perfume.com/blog/")
-//            .addConverterFactory(SimpleXmlConverterFactory.create())
-//            .build()
-//        var feedAPI = retrofit.create(FeedAPI::class.java)
-//
-//        feedAPI.feed().enqueue(object :Callback<List<Feed>> {
 
             val feedAPI = APIClient().getClient()?.create(FeedAPI::class.java)
              feedAPI?.feed?.enqueue(object : Callback<Feed?> {
@@ -105,10 +86,8 @@ class perfume : AppCompatActivity() {
 
                     Log.d(TAG, "onResponse: feed: " + response.body().toString())
                     Log.d(TAG, "onResponse: Server Response: $response")
-               ///  val entries = response.body()?.channel?.title
                     val url =  response.body()?.channel?.items!![0].enclosure?.url
                     Log.d(TAG, "url: $url")
-                  ////  Log.d(TAG, "onResponse: feed: $entries")
                     val xmlresponse = response.errorBody()
                     Log.d(TAG, "onResponse: feed: $xmlresponse")
                 for(data in response.body()!!.channel?.items!!){
@@ -126,24 +105,7 @@ class perfume : AppCompatActivity() {
         })
    }
 
-//    private val textWatcher = object : TextWatcher {
-//        override fun afterTextChanged(s: Editable?) {
-//           Filter(s.toString())
-//        }
-//
-//        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//        }
-//
-//        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//          ///  recView.text = s
-//
-//        }
-//    }
-//
-//    private fun Filter(text: String) {
-//
-//
-//    }
+
 
     private fun filter(text: String) {
         //new array list that will hold the filtered data
